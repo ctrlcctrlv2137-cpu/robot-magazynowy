@@ -34,3 +34,58 @@ graph TD
     style UC10 fill:#fff4dd,stroke:#d4a017
     style UC11 fill:#fff4dd,stroke:#d4a017
 ```
+
+### Diagram stanów systemu (State Diagram)
+
+```mermaid
+stateDiagram-v2
+    [*] --> Wyłączony
+    
+    Wyłączony --> Uruchomienie: Operator włącza system
+    
+    Uruchomienie --> Gotowy: System zainicjalizowany
+    Uruchomienie --> Błąd: Inicjalizacja nie powiodła się
+    
+    Gotowy --> Czekanie: Robot czeka na paczkę
+    Gotowy --> Awaryjne_zatrzymanie: Naciśnięty przycisk STOP
+    
+    Czekanie --> Pobieranie: Paczka dostarczona
+    
+    Pobieranie --> Selekcja_palety: Paczka pobrana
+    Pobieranie --> Błąd_chwytu: Chwyt nie powiódł się
+    
+    Selekcja_palety --> Odkładanie: Paleta wybrana
+    
+    Odkładanie --> Czekanie: Paczka odłożona
+    Odkładanie --> Błąd: Niemożliwość dostępu do palety
+    
+    Błąd_chwytu --> Zgłoszenie_błędu: Błąd zarejestrowany
+    Zgłoszenie_błędu --> Bezpieczna_strefa: Paczka do strefy bezpieczeństwa
+    Bezpieczna_strefa --> Czekanie: Odłożona, czekaj na następną
+    
+    Błąd --> Diagnostyka: Technik badania
+    
+    Diagnostyka --> Konserwacja: Wymagana naprawa
+    Diagnostyka --> Gotowy: Brak problemu
+    
+    Konserwacja --> Aktualizacja_oprogramowania: Update dostępny
+    Konserwacja --> Gotowy: Naprawa ukończona
+    
+    Aktualizacja_oprogramowania --> Gotowy: Update zainstalowany
+    
+    Awaryjne_zatrzymanie --> Wyłączony: System zatrzymany
+    
+    Wyłączony --> [*]
+    
+    %% Stylizacja
+    classDef error fill:#fff4dd,stroke:#d4a017,stroke-width:2px
+    classDef normal fill:#e1f5e1,stroke:#2ecc71,stroke-width:2px
+    classDef warning fill:#ffe1e1,stroke:#e74c3c,stroke-width:2px
+    
+    class Błąd error
+    class Błąd_chwytu error
+    class Awaryjne_zatrzymanie warning
+    class Gotowy normal
+    class Czekanie normal
+    class Odkładanie normal
+```
